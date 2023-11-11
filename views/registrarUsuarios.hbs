@@ -1,0 +1,29 @@
+<!-- registrarUsuario.hbs -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Usuario</title>
+</head>
+<body>
+    <h1>Registrar Usuario</h1>
+
+    <form action="/usuarios" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="codigoEstudiante">Código de Estudiante:</label>
+        <input type="text" id="codigoEstudiante" name="codigoEstudiante" required>
+
+        <label for="grado">Grado:</label>
+        <input type="text" id="grado" name="grado" required>
+
+        <label for="seccion">Sección:</label>
+        <input type="text" id="seccion" name="seccion" required>
+
+        <button type="submit">Registrar Usuario</button>
+    </form>
+</body>
+</html>

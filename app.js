@@ -3,8 +3,10 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const Libro = require('./models/Libro');
+const Usuario = require('./models/Usuario');
+
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://sosamablogs:<password>@cluster0.gaopxrt.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://sosamablogs:chemita123@cluster0.gaopxrt.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -59,6 +61,32 @@ app.post('/registro', async (req, res) => {
   }
 });
 
+
+// Rutas para el registro y búsqueda de usuarios
+app.get('/usuarios', (req, res) => {
+    // Lógica para mostrar la página de búsqueda de usuarios
+    res.render('buscarUsuarios');
+});
+
+app.post('/usuarios', (req, res) => {
+    // Lógica para registrar un nuevo usuario
+    const nuevoUsuario = new Usuario({
+        nombre: req.body.nombre,
+        codigoEstudiante: req.body.codigoEstudiante,
+        grado: req.body.grado,
+        seccion: req.body.seccion
+    });
+
+    nuevoUsuario.save((err, usuario) => {
+        if (err) {
+            // Manejo de errores, por ejemplo, redirigir a una página de error
+            res.redirect('/error');
+        } else {
+            // Redirige a la página de búsqueda de usuarios después del registro exitoso
+            res.redirect('/usuarios');
+        }
+    });
+});
 
 
 app.listen(port, () => {
