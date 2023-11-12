@@ -1,10 +1,10 @@
-<!-- views/registroLibros -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Libros</title>
+    <link rel="stylesheet" href="./styles/styles.css">
 </head>
 <body>
     <h1>Registro de Libros</h1>
@@ -12,7 +12,19 @@
         <!-- Agrega los campos del formulario según tus necesidades -->
         <label for="titulo">Título:</label>
         <input type="text" id="titulo" name="titulo" required>
-        <!-- Agrega más campos según sea necesario -->
+
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" required>
+
+        <label for="categoria">Categoría:</label>
+        <input type="text" id="categoria" name="categoria" required>
+
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required>
+
+        <label for="copias">Copias Disponibles:</label>
+        <input type="text" id="copias" name="copias" required>
+
         <button type="submit">Registrar Libro</button>
     </form>
 </body>
