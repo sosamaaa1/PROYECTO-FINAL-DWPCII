@@ -26,11 +26,16 @@ app.use(express.static('public'));
 
 // Definir una ruta inicial
 app.get('/', (req, res) => {
-  res.render('index'); // Renderizar la vista llamada "index.hbs"
+  res.render('index'); 
 });
 // Agregar una ruta GET para "/registro"
 app.get('/registro', (req, res) => {
-  res.render('registro'); // Renderizar la vista llamada "registro.hbs"
+  res.render('registroLibros'); 
+});
+
+// Agregar una ruta GET para "/prestamos-devoluciones"
+app.get('/prestamos-devoluciones', (req, res) => {
+  res.render('prestamosDevoluciones'); 
 });
 
 // Manejar la solicitud POST del formulario de registro de libros
@@ -46,7 +51,6 @@ app.post('/registro', async (req, res) => {
       categoria,
       ISBN,
       copiasDisponibles
-      // Agrega más campos según sea necesario
     });
 
     // Guardar el nuevo libro en la base de datos
@@ -55,7 +59,7 @@ app.post('/registro', async (req, res) => {
     // Redirecciona a la página principal o muestra un mensaje de éxito
     res.render('exito', { mensaje: 'Libro registrado con éxito.' });
   } catch (error) {
-    // Manejar errores, puedes redirigir a una página de error o mostrar un mensaje en la misma página
+    // Manejo de errores
     console.error(error);
     res.redirect('/');
   }
@@ -79,7 +83,7 @@ app.post('/usuarios', (req, res) => {
 
     nuevoUsuario.save((err, usuario) => {
         if (err) {
-            // Manejo de errores, por ejemplo, redirigir a una página de error
+            // Manejo de errores
             res.redirect('/error');
         } else {
             // Redirige a la página de búsqueda de usuarios después del registro exitoso
@@ -88,6 +92,23 @@ app.post('/usuarios', (req, res) => {
     });
 });
 
+// Manejar la solicitud POST del formulario de préstamos y devoluciones
+app.post('/prestamos-devoluciones', async (req, res) => {
+  try {
+    // Extraer datos del formulario
+    const { usuarioId, libroId, accion } = req.body;
+
+    // Implementar lógica para registrar préstamos y devoluciones en la base de datos
+    // Puedes usar las funciones del modelo Libro y Usuario para actualizar la información correspondiente
+
+    // Redirecciona a la página principal o muestra un mensaje de éxito
+    res.render('exito', { mensaje: 'Operación realizada con éxito.' });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
 
 app.listen(port, () => {
   console.log(`Aplicación en ejecución en http://localhost:${port}`);

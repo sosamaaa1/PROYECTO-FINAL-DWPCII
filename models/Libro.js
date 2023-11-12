@@ -6,7 +6,6 @@ const libroSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // Agrega más campos según sea necesario
 });
 
 const Libro = mongoose.model('Libro', libroSchema);

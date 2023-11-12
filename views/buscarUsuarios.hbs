@@ -10,12 +10,42 @@
 <body>
     <h1>Buscar Usuarios</h1>
 
-    <form action="/usuarios" method="GET">
+    <form action="/prestamos-devoluciones" method="GET">
         <label for="busqueda">Buscar por nombre o código de estudiante:</label>
         <input type="text" id="busqueda" name="busqueda" required>
         <button type="submit">Buscar</button>
     </form>
 
-    <!-- Aquí puedes mostrar los resultados de la búsqueda si los hay -->
+    <!-- Mostrar resultados de la búsqueda -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Código de Estudiante</th>
+                <th>Grado</th>
+                <th>Sección</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí deberías iterar sobre los resultados de la búsqueda -->
+            <!-- Por cada usuario encontrado, muestra una fila con un botón para seleccionar -->
+            {{#each resultadosBusqueda}}
+                <tr>
+                    <td>{{nombre}}</td>
+                    <td>{{codigoEstudiante}}</td>
+                    <td>{{grado}}</td>
+                    <td>{{seccion}}</td>
+                    <td>
+                        <!-- Agrega un botón que envíe el formulario con el usuario seleccionado -->
+                        <form action="/prestamos-devoluciones" method="POST">
+                            <input type="hidden" name="usuarioId" value="{{_id}}">
+                            <button type="submit">Seleccionar</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </body>
 </html>
