@@ -6,11 +6,7 @@ const Libro = require('./models/Libro');
 const Usuario = require('./models/Usuario');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://sosamablogs:chemita123@cluster0.gaopxrt.mongodb.net/?retryWrites=true&w=majority', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
+mongoose.connect('mongodb+srv://usuario1:chemita123@cluster0.gaopxrt.mongodb.net/Biblioteca');
 
 // Configuración de body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
