@@ -14,7 +14,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Configurar Handlebars como el motor de vistas
 const exphbs = require('express-handlebars');
 
-app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'main', layoutsDir: __dirname + '/views/layouts/' }));
+
+app.engine('.hbs', exphbs({
+  extname: '.hbs',
+  defaultLayout: 'main',
+  layoutsDir: __dirname + '/views/layouts/',
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+}));
+
 app.set('view engine', '.hbs');
 
 // Servir archivos estáticos desde la carpeta "public"
@@ -24,14 +34,12 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.render('index'); 
 });
+
+//--------------------------------------------------------------------------------------
+// Sección de registro libros
 // Agregar una ruta GET para "/registro"
 app.get('/registro', (req, res) => {
-  res.render('registroLibros'); 
-});
-
-// Agregar una ruta GET para "/prestamos-devoluciones"
-app.get('/prestamos-devoluciones', (req, res) => {
-  res.render('prestamosDevoluciones'); 
+  res.render('books/registroLibros'); 
 });
 
 // Manejar la solicitud POST del formulario de registro de libros
@@ -53,7 +61,7 @@ app.post('/registro', async (req, res) => {
     await nuevoLibro.save();
 
     // Redirecciona a la página principal o muestra un mensaje de éxito
-    res.render('exito', { mensaje: 'Libro registrado con éxito.' });
+    res.render('layouts/exito', { mensaje: 'Libro registrado con éxito.' });
   } catch (error) {
     // Manejo de errores
     console.error(error);
@@ -61,44 +69,32 @@ app.post('/registro', async (req, res) => {
   }
 });
 
-
-// Rutas para el registro y búsqueda de usuarios
+//--------------------------------------------------------------------------------------
+// Sección de registro usuarios
+// Agregar una ruta GET para "/usuarios"
 app.get('/usuarios', (req, res) => {
-    // Lógica para mostrar la página de búsqueda de usuarios
-    res.render('buscarUsuarios');
+  res.render('users/registrarUsuarios'); 
 });
 
-app.post('/usuarios', (req, res) => {
-    // Lógica para registrar un nuevo usuario
-    const nuevoUsuario = new Usuario({
-        nombre: req.body.nombre,
-        codigoEstudiante: req.body.codigoEstudiante,
-        grado: req.body.grado,
-        seccion: req.body.seccion
-    });
-
-    nuevoUsuario.save((err, usuario) => {
-        if (err) {
-            // Manejo de errores
-            res.redirect('/error');
-        } else {
-            // Redirige a la página de búsqueda de usuarios después del registro exitoso
-            res.redirect('/usuarios');
-        }
-    });
-});
-
-// Manejar la solicitud POST del formulario de préstamos y devoluciones
-app.post('/prestamos-devoluciones', async (req, res) => {
+// Manejar la solicitud POST del formulario de registro de usuarios
+app.post('/usuarios', async (req, res) => {
   try {
     // Extraer datos del formulario
-    const { usuarioId, libroId, accion } = req.body;
+    const { nombre, codigoEstudiante, grado, seccion } = req.body;
 
-    // Implementar lógica para registrar préstamos y devoluciones en la base de datos
-    // Puedes usar las funciones del modelo Libro y Usuario para actualizar la información correspondiente
+    // Crear un nuevo usuario usando el modelo
+    const nuevoUsuario = new Usuario({
+      nombre, 
+      codigoEstudiante, 
+      grado, 
+      seccion
+    });
+
+    // Guardar el nuevo usuario en la base de datos
+    await nuevoUsuario.save();
 
     // Redirecciona a la página principal o muestra un mensaje de éxito
-    res.render('exito', { mensaje: 'Operación realizada con éxito.' });
+    res.render('layouts/exito', { mensaje: 'Usuario registrado con éxito.' });
   } catch (error) {
     // Manejo de errores
     console.error(error);
@@ -106,6 +102,30 @@ app.post('/prestamos-devoluciones', async (req, res) => {
   }
 });
 
+//--------------------------------------------------------------------------------------
+// Sección de búsqueda de usuarios
+app.get('/buscar', async (req, res) => {
+  try {
+    // Obtener la consulta de búsqueda desde la URL
+    const busqueda = req.query.busqueda;
+
+    // Realizar la búsqueda en MongoDB
+    const resultadosBusqueda = await Usuario.find({
+      $or: [
+        { nombre: { $regex: new RegExp(busqueda, 'i') } },
+        { codigoEstudiante: { $regex: new RegExp(busqueda, 'i') } },
+      ],
+    });
+
+    // Renderizar la página con los resultados de la búsqueda
+    res.render('users/buscarUsuarios', { resultadosBusqueda });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+//--------------------------------------------------------------------------------------
 app.listen(port, () => {
   console.log(`Aplicación en ejecución en http://localhost:${port}`);
 });

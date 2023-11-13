@@ -16,13 +16,14 @@ const libroSchema = new mongoose.Schema({
     },
     ISBN: {
         type: String,
-        required: true
+         required: true 
     },
     copiasDisponibles: {
-        type: Number,  // Cambiado a Number si la cantidad es un número entero
-        required: true
+        type: String,
+         required: true
     },
 });
+
 
 const Libro = mongoose.model('Libro', libroSchema);
 
