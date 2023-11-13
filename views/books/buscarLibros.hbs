@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Usuarios</title>
+    <title>Buscar Libros</title>
      <link rel="stylesheet" href="./style/styles.css">
 </head>
 <body>
-    <h1>Buscar Usuarios</h1>
+    <h1>Buscar Libros</h1>
 
-    <form action="/buscar" method="GET">
-        <label for="busqueda">Buscar por nombre o código de estudiante:</label>
+    <form action="/libros" method="GET">
+        <label for="busqueda">Buscar por titulo, autor o categoria:</label>
         <input type="text" id="busqueda" name="busqueda" required>
         <button type="submit">Buscar</button>
     </form>
@@ -20,22 +20,23 @@
     <table>
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Código de Estudiante</th>
-                <th>Grado</th>
-                <th>Sección</th>
+                <th>Titulo</th>
+                <th>Autor</th>
+                <th>Categoria</th>
+                <th>ISBN</th>
+                <th>Copias Disponibles</th>
                 <th>Acción</th>
             </tr>
         </thead>
         <tbody>
-
             <!-- Por cada usuario encontrado, muestra una fila con un botón para seleccionar -->
             {{#each resultadosBusqueda}}
                 <tr>
-                    <td>{{nombre}}</td>
-                    <td>{{codigoEstudiante}}</td>
-                    <td>{{grado}}</td>
-                    <td>{{seccion}}</td>
+                    <td>{{titulo}}</td>
+                    <td>{{autor}}</td>
+                    <td>{{categoria}}</td>
+                    <td>{{ISBN}}</td>
+                    <td>{{copiasDisponibles}}</td>
                     <td>
 
                     </td>

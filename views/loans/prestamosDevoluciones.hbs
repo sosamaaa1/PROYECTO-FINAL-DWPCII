@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prestamos y Devoluciones</title>
+  <link rel="stylesheet" href="./style/styles.css">
+</head>
+<body>
+  <h1>Prestamos y Devoluciones</h1>
+
+  <form action="/prestamo" method="post">
+    <label for="usuario">Usuario:</label>
+    <select name="usuario" id="usuario">
+      {{#each usuarios}}
+        <option value="{{_id}}">{{nombre}}</option>
+      {{/each}}
+    </select>
+
+    <label for="libro">Libro:</label>
+    <select name="libro" id="libro">
+      {{#each libros}}
+        <option value="{{_id}}">{{titulo}}</option>
+      {{/each}}
+    </select>
+
+    <label for="fechaPrestamo">Fecha de préstamo:</label>
+    <input type="date" name="fechaPrestamo" required>
+
+    <label for="fechaDevolucionEstimada">Fecha de devolución estimada:</label>
+    <input type="date" name="fechaDevolucionEstimada" required>
+
+    <button type="submit">Realizar Préstamo</button>
+  </form>
+</body>
+</html>
