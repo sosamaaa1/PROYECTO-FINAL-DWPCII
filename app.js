@@ -148,6 +148,41 @@ app.post('/prestamo', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
+// Sección de búsqueda y edición de usuarios
+app.get('/usuarios/:codigoEstudiante/editar', async (req, res) => {
+  try {
+    // Obtener el código de estudiante desde la URL
+    const codigoEstudiante = req.params.codigoEstudiante;
+
+    // Obtener los datos del usuario desde la base de datos
+    const usuario = await Usuario.findOne({ codigoEstudiante });
+
+    // Renderizar la página de edición con los datos del usuario
+    res.render('users/editarUsuario', usuario);
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/usuarios');
+  }
+});
+
+app.post('/usuarios/:codigoEstudiante/editar', async (req, res) => {
+  try {
+    // Obtener el código de estudiante desde la URL
+    const codigoEstudiante = req.params.codigoEstudiante;
+
+    // Actualizar los datos del usuario en la base de datos
+    await Usuario.updateOne({ codigoEstudiante }, { $set: req.body });
+
+    // Redireccionar a la página de búsqueda de usuarios
+    res.redirect('/usuarios');
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/usuarios');
+  }
+});
+
 // Sección de búsqueda de usuarios
 app.get('/buscar', async (req, res) => {
   try {
@@ -167,11 +202,12 @@ app.get('/buscar', async (req, res) => {
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/');
+    res.redirect('/usuarios');
   }
 });
+
 //--------------------------------------------------------------------------------------
-// Sección de búsqueda de libros
+// Sección de búsqueda de libros 
 app.get('/libros', async (req, res) => {
   try {
     // Obtener la consulta de búsqueda desde la URL
