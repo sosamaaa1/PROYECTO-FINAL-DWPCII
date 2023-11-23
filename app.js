@@ -207,7 +207,7 @@ app.get('/buscar', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
-// Sección de búsqueda de libros 
+// Sección de búsqueda de libros
 app.get('/libros', async (req, res) => {
   try {
     // Obtener la consulta de búsqueda desde la URL
@@ -228,6 +228,68 @@ app.get('/libros', async (req, res) => {
     // Manejo de errores
     console.error(error);
     res.redirect('/');
+  }
+});
+
+// Sección de registro de libros
+app.post('/libros', async (req, res) => {
+  try {
+    // Extraer datos del formulario
+    const { titulo, autor, categoria, ISBN, copiasDisponibles } = req.body;
+
+    // Crear un nuevo libro
+    const nuevoLibro = new Libro({
+      titulo,
+      autor,
+      categoria,
+      ISBN,
+      copiasDisponibles
+    });
+
+    // Guardar el nuevo libro en la base de datos
+    await nuevoLibro.save();
+
+    // Redirecciona a la página principal o muestra un mensaje de éxito
+    res.render('layouts/exito', { mensaje: 'Libro registrado con éxito.' });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+// Sección de edición de libros
+app.get('/libros/:ISBN/editar', async (req, res) => {
+  try {
+    // Obtener el ISBN desde la URL
+    const ISBN = req.params.ISBN;
+
+    // Obtener los datos del libro desde la base de datos
+    const libro = await Libro.findOne({ ISBN });
+
+    // Renderizar la página de edición con los datos del libro
+    res.render('books/editarLibro', libro);
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/libros');
+  }
+});
+
+app.post('/libros/:ISBN/editar', async (req, res) => {
+  try {
+    // Obtener el ISBN desde la URL
+    const ISBN = req.params.ISBN;
+
+    // Actualizar los datos del libro en la base de datos
+    await Libro.updateOne({ ISBN }, { $set: req.body });
+
+    // Redireccionar a la página de búsqueda de libros
+    res.redirect('/libros');
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/libros');
   }
 });
 

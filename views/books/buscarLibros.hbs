@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Libros</title>
-     <link rel="stylesheet" href="./style/styles.css">
+    <link rel="stylesheet" href="./style/styles.css">
 </head>
+
 <body>
     <h1>Buscar Libros</h1>
 
@@ -31,25 +33,26 @@
         <tbody>
             <!-- Por cada usuario encontrado, muestra una fila con un botón para seleccionar -->
             {{#each resultadosBusqueda}}
-                <tr>
-                    <td>{{titulo}}</td>
-                    <td>{{autor}}</td>
-                    <td>{{categoria}}</td>
-                    <td>{{ISBN}}</td>
-                    <td>{{copiasDisponibles}}</td>
-                    <td>
-
-                    </td>
-                </tr>
+            <tr>
+                <td>{{titulo}}</td>
+                <td>{{autor}}</td>
+                <td>{{categoria}}</td>
+                <td>{{ISBN}}</td>
+                <td>{{copiasDisponibles}}</td>
+                <td>
+                    <a href="/libros/{{ISBN}}/editar">Modificar</a>
+                </td>
+            </tr>
             {{/each}}
         </tbody>
     </table>
     <style>
-        
+
     </style>
-        <div>
+    <div>
         <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
         <button onclick="window.location.href='http://127.0.0.1:3000/registro'">REGISTRAR NUEVO LIBRO</button>
     </div>
 </body>
+
 </html>
