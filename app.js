@@ -146,7 +146,20 @@ app.post('/prestamo', async (req, res) => {
     res.redirect('/');
   }
 });
+// Ruta para mostrar la lista de devoluciones
+app.get('/devoluciones', async (req, res) => {
+  try {
+    // Obtener todas las devoluciones desde la base de datos
+    const devoluciones = await Devolucion.find().populate('usuario libro');
 
+    // Renderizar la página de devoluciones con la lista de devoluciones
+    res.render('loans/devoluciones', { devoluciones });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
 //--------------------------------------------------------------------------------------
 // Sección de búsqueda y edición de usuarios
 app.get('/usuarios/:codigoEstudiante/editar', async (req, res) => {
@@ -294,7 +307,9 @@ app.post('/libros/:ISBN/editar', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
-// Sección de registro de Prestamos y devoluciones
+const Devolucion = require('./models/devolucion'); // Asegúrate de tener el modelo Devolucion
+
+// Sección de registro de Préstamos y Devoluciones
 // Agregar una ruta GET para "/prestamos-devoluciones"
 app.get('/prestamo', async (req, res) => {
   try {
@@ -317,7 +332,7 @@ app.post('/prestamo', async (req, res) => {
     // Extraer datos del formulario de préstamo
     const { usuario, libro, fechaPrestamo, fechaDevolucionEstimada } = req.body;
 
-    // Crear un nuevo prestamo 
+    // Crear un nuevo préstamo 
     const nuevoPrestamo = new Prestamo({
       usuario,
       libro,
@@ -325,7 +340,7 @@ app.post('/prestamo', async (req, res) => {
       fechaDevolucionEstimada
     });
 
-    // Guardar el nuevo prestamo en la base de datos
+    // Guardar el nuevo préstamo en la base de datos
     await nuevoPrestamo.save();
 
     // Actualizar el estado de disponibilidad del libro (suponiendo que tienes un campo 'disponible' en tu modelo de libro)
@@ -340,7 +355,7 @@ app.post('/prestamo', async (req, res) => {
   }
 });
 
-// Sección de búsqueda de prestamos
+// Sección de búsqueda de préstamos
 app.get('/bPrestamos', async (req, res) => {
   try {
     // Obtener la consulta de búsqueda desde la URL
@@ -385,13 +400,23 @@ app.post('/devolucion/:id', async (req, res) => {
   try {
     const prestamoId = req.params.id;
 
-    // Actualizar el estado de disponibilidad del libro
+    // Obtener los datos del préstamo desde la base de datos
     const prestamo = await Prestamo.findById(prestamoId);
+
+    // Actualizar el estado de disponibilidad del libro a true
     await Libro.findByIdAndUpdate(prestamo.libro, { disponible: true });
 
     // Registrar la fecha de devolución en el préstamo
     prestamo.fechaDevolucion = new Date();
     await prestamo.save();
+
+    // Almacenar la información de la devolución en la colección de Devolucion
+    const nuevaDevolucion = new Devolucion({
+      usuario: prestamo.usuario,
+      libro: prestamo.libro,
+      fechaDevolucion: prestamo.fechaDevolucion,
+    });
+    await nuevaDevolucion.save();
 
     // Redireccionar a la página de búsqueda de préstamos
     res.redirect('/bPrestamos');
@@ -401,8 +426,7 @@ app.post('/devolucion/:id', async (req, res) => {
     res.redirect('/bPrestamos');
   }
 });
-
-//--------------------------------------------------------------------------------------
+//-----------------------------------------------------------
 app.listen(port, () => {
   console.log(`Aplicación en ejecución en http://localhost:${port}`);
 });

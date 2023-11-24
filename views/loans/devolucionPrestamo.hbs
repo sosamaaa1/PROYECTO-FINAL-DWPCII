@@ -7,20 +7,29 @@
     <link rel="stylesheet" href="./style/styles.css">
 </head>
 <body>
+
     <h1>Devolución de Préstamo</h1>
 
-    <form action="/devolucion/{{prestamo._id}}" method="POST">
-        <p>Usuario: {{prestamo.usuario}}</p>
-        <p>Libro: {{prestamo.libro}}</p>
-        <p>Fecha de Préstamo: {{prestamo.fechaPrestamo}}</p>
-        <p>Fecha de Devolución Estimada: {{prestamo.fechaDevolucionEstimada}}</p>
-        
+    <!-- Añadir información sobre el estado del libro y la fecha de devolución -->
+    <p>Estado del Libro: {{#if prestamo.libro}}{{#if prestamo.libro.disponible}}Disponible{{else}}No disponible{{/if}}{{/if}}</p>
+    {{#if prestamo.fechaDevolucion}}
+      <p>Fecha de Devolución: {{prestamo.fechaDevolucion}}</p>
+    {{else}}
+      <!-- Formulario de devolución -->
+      <form action="/devolucion/{{prestamo._id}}" method="POST">
         <label for="fechaDevolucion">Fecha de Devolución:</label>
         <input type="date" name="fechaDevolucion" required>
-
         <button type="submit">Registrar Devolución</button>
-    </form>
+      </form>
+    {{/if}}
 
+    <!-- Información del préstamo -->
+    <p>Usuario: {{prestamo.usuario}}</p>
+    <p>Libro: {{prestamo.libro.titulo}}</p>
+    <p>Fecha de Préstamo: {{prestamo.fechaPrestamo}}</p>
+    <p>Fecha de Devolución Estimada: {{prestamo.fechaDevolucionEstimada}}</p>
+
+    <!-- Botones de cancelar y regresar -->
     <div>
         <button onclick="window.location.href='http://127.0.0.1:3000/bPrestamos'">Cancelar</button>
     </div>
