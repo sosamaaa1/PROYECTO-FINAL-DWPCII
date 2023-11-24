@@ -175,11 +175,11 @@ app.post('/usuarios/:codigoEstudiante/editar', async (req, res) => {
     await Usuario.updateOne({ codigoEstudiante }, { $set: req.body });
 
     // Redireccionar a la página de búsqueda de usuarios
-    res.redirect('/usuarios');
+    res.redirect('/buscar');
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/usuarios');
+    res.redirect('/buscar');
   }
 });
 
@@ -202,7 +202,7 @@ app.get('/buscar', async (req, res) => {
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/usuarios');
+    res.redirect('/buscar');
   }
 });
 
@@ -272,7 +272,7 @@ app.get('/libros/:ISBN/editar', async (req, res) => {
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/libros');
+    res.redirect('/registro');
   }
 });
 
