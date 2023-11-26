@@ -420,6 +420,9 @@ app.post('/devolucion/:id', async (req, res) => {
     });
     await nuevaDevolucion.save();
 
+    // Eliminar el registro del préstamo
+    await Prestamo.findByIdAndDelete(prestamoId);
+
     // Redireccionar a la página de búsqueda de préstamos
     res.redirect('/bPrestamos');
   } catch (error) {
@@ -428,6 +431,7 @@ app.post('/devolucion/:id', async (req, res) => {
     res.redirect('/bPrestamos');
   }
 });
+
 //-----------------------------------------------------------
 app.listen(port, () => {
   console.log(`Aplicación en ejecución en http://localhost:${port}`);
