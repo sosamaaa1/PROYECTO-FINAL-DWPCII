@@ -22,6 +22,9 @@ const libroSchema = new mongoose.Schema({
         type: String,
          required: true
     },
+    disponible: {
+         type: Boolean,
+          default: true } // Nuevo campo para el estado del libro
 });
 
 
