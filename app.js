@@ -5,9 +5,10 @@ const port = 3000;
 const bodyParser = require('body-parser');
 const Libro = require('./models/Libro');
 const Usuario = require('./models/Usuario');
-// Importa el modelo de Prestamo
 const Prestamo = require('./models/Prestamo');
 const Devolucion = require('./models/devolucion');
+const Reservacion = require('./models/Reservacion'); 
+
 const router = express.Router();
 
 const mongoose = require('mongoose');
@@ -405,6 +406,80 @@ app.post('/realizarDevolucion/:idPrestamo', async (req, res) => {
 });
 //--------------------------------------------------------------------------------------
 
+
+
+//--------------------------------------------------------------------------------------
+// Agregar una ruta GET para "/reservacion"
+app.get('/reservacion', async (req, res) => {
+  try {
+    // Obtener la lista de libros no disponibles desde la base de datos
+    const librosNoDisponibles = await Libro.find({ copiasDisponibles: { $eq: 0 } }).lean();
+
+    // Obtener la lista de usuarios desde la base de datos
+    const usuarios = await Usuario.find().lean();
+    console.log('Usuarios:', usuarios); // Añade este log
+
+    // Renderizar la página de reservaciones con la información de libros no disponibles
+    res.render('reservaciones/registroReservaciones', { libros: librosNoDisponibles, usuarios });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+// Agregar una ruta POST para "/reservacion"
+app.post('/reservacion', async (req, res) => {
+  try {
+    // Lógica para manejar la solicitud POST del formulario de reservación
+    const { usuario, libro, fechaPrestamo } = req.body;
+
+    // Verificar si el libro está no disponible
+    const libroNoDisponible = await Libro.findById(libro);
+
+    if (!libroNoDisponible || libroNoDisponible.copiasDisponibles > 0) {
+      // El libro está disponible o no existe
+      return res.redirect('/reservacion?error=El libro seleccionado está disponible o no existe.');
+    }
+
+    // Crear una nueva reservación con la fecha de préstamo
+    const nuevaReservacion = new Reservacion({
+      usuario,
+      libro,
+      fechaReservacion: fechaPrestamo, // Aquí asignamos la fecha de préstamo
+    });
+
+    // Guardar la reservación en la base de datos
+    await nuevaReservacion.save();
+
+    // Redireccionar o renderizar una página de éxito
+    res.render('layouts/exito', { mensaje: 'Reservación realizada con éxito.' });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+/// Agregar una ruta GET para "/buscarReservaciones"
+app.get('/buscarReservaciones', async (req, res) => {
+  try {
+    // Obtener todas las reservaciones con datos de usuario y libro poblados
+    const reservaciones = await Reservacion.find().populate('usuario').populate('libro').lean();
+
+    // Imprimir las reservaciones en la consola para verificar
+    console.log('Reservaciones:', reservaciones);
+
+    // Renderizar la página con los resultados de la búsqueda de reservaciones
+    res.render('reservaciones/buscarReservaciones', { reservaciones });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+//--------------------------------------------------------------------------------------
 
 app.listen(port, () => {
   console.log(`🎉Aplicación en ejecución en http://localhost:${port}`);

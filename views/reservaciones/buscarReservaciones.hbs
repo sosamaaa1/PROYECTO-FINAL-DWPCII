@@ -1,0 +1,48 @@
+<!-- buscarReservaciones.hbs -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar Reservaciones</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+
+<body>
+  <h1>Buscar Reservaciones</h1>
+
+  <!--<form action="/buscarReservaciones" method="GET">
+    <label for="busqueda">Buscar por libro o usuario:</label>
+    <input type="text" id="busqueda" name="busqueda" required />
+    <button type="submit">Buscar</button>
+  </form> -->
+
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Libro</th>
+        <th>Fecha de Reservación</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each reservaciones}}
+        <tr>
+          <td>{{usuario.nombre}}</td>
+          <td>{{libro.titulo}}</td>
+          <td>{{fechaReservacion}}</td>
+          <td>{{estado}}</td>
+
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div>
+    <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
+    <button onclick="window.location.href='http://127.0.0.1:3000/reservacion'">REGISTRAR NUEVA RESERVACIÓN</button>
+  </div>
+</body>
+</html>
