@@ -1,58 +1,64 @@
-<!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Buscar Libros</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-</head>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
 
-<body>
+  <body>
     <h1>Buscar Libros</h1>
 
     <form action="/libros" method="GET">
-        <label for="busqueda">Buscar por titulo, autor o categoria:</label>
-        <input type="text" id="busqueda" name="busqueda" required>
-        <button type="submit">Buscar</button>
+      <label for="busqueda">Buscar por titulo, autor o categoria:</label>
+      <input type="text" id="busqueda" name="busqueda" required />
+      <button type="submit">Buscar</button>
     </form>
 
     <!-- Mostrar resultados de la búsqueda -->
     <table>
-        <thead>
-            <tr>
-                <th>Titulo</th>
-                <th>Autor</th>
-                <th>Categoria</th>
-                <th>ISBN</th>
-                <th>Copias Disponibles</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Por cada usuario encontrado, muestra una fila con un botón para seleccionar -->
-            {{#each resultadosBusqueda}}
-            <tr>
-                <td>{{titulo}}</td>
-                <td>{{autor}}</td>
-                <td>{{categoria}}</td>
-                <td>{{ISBN}}</td>
-                <td>{{copiasDisponibles}}</td>
-                <td>
-                    <a href="/libros/{{ISBN}}/editar">Modificar</a>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    <style>
+      <thead>
+        <tr>
+          <th>Titulo</th>
+          <th>Autor</th>
+          <th>Categoria</th>
+          <th>ISBN</th>
+          <th>Copias Disponibles</th>
+          <th>Disponibilidad</th>
+          <!-- Nueva columna para la disponibilidad -->
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Por cada libro encontrado, muestra una fila con un botón para seleccionar -->
+        {{#each resultadosBusqueda}}
+          <tr>
+            <td>{{titulo}}</td>
+            <td>{{autor}}</td>
+            <td>{{categoria}}</td>
+            <td>{{ISBN}}</td>
+            <td>{{copiasDisponibles}}</td>
+            <td>{{#if disponible}}Disponible{{else}}No disponible{{/if}}</td>
+            <td>
+              <form action="/libros/{{ISBN}}/editar" method="GET">
+                <button type="submit">MODIFICAR</button>
+              </form>
 
-    </style>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
     <div>
-        <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
-        <button onclick="window.location.href='http://127.0.0.1:3000/registro'">REGISTRAR NUEVO LIBRO</button>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/'"
+      >REGRESAR</button>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/registro'"
+      >REGISTRAR NUEVO LIBRO</button>
     </div>
-</body>
+  </body>
 
 </html>
