@@ -1,0 +1,56 @@
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar Libros</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+
+<body>
+  <h1>Buscar Libros</h1>
+
+  <form action="/buscarPrestamos" method="GET">
+    <label for="busqueda">Buscar por libro o usuario:</label>
+    <input type="text" id="busqueda" name="busqueda" required />
+    <button type="submit">Buscar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Libro</th>
+        <th>Fecha de Préstamo</th>
+        <th>Fecha de Devolución Estimada</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each resultadosBusqueda}}
+        <tr>
+          <td>{{usuario}}</td>
+          <td>{{libro}}</td>
+          <td>{{fechaPrestamo}}</td>
+          <td>{{fechaDevolucionEstimada}}</td>
+          <td>
+<form action="/realizarDevolucion/{{_id}}" method="POST">
+  <button type="submit">DEVOLVER</button>
+</form>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{#if exito}}
+    <p>Devolución realizada con éxito.</p>
+  {{/if}}
+
+  <div>
+    <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
+    <button onclick="window.location.href='http://127.0.0.1:3000/prestamo'">REGISTRAR NUEVO PRESTAMO</button>
+  </div>
+</body>
+</html>

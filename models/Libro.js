@@ -25,11 +25,9 @@ const libroSchema = new mongoose.Schema({
     disponible: {
          type: Boolean,
           default: true },
-    reservado: {
-         type: Boolean,
-         default: false
-        }
-    
+    prestamos: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Prestamo' },
 });
 
 

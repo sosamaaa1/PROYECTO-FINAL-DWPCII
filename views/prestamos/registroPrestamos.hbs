@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prestamos y Devoluciones</title>
+  <title>Registro de Prestamos</title>
   <link rel="stylesheet" href="../styles/styles.css">
 </head>
 <body>
-  <h1>Prestamos y Devoluciones</h1>
+  <h1>Registro de Prestamos</h1>
 
   <form action="/prestamo" method="post">
     <label for="usuario">Usuario:</label>
-    <select name="usuario" id="usuario">
+    <select name="usuario" id="usuario" required>
       {{#each usuarios}}
         <option value="{{_id}}">{{nombre}}</option>
       {{/each}}
     </select>
 
     <label for="libro">Libro:</label>
-    <select name="libro" id="libro">
+    <select name="libro" id="libro" required>
       {{#each libros}}
         <option value="{{_id}}">{{titulo}}</option>
       {{/each}}
@@ -32,8 +32,9 @@
 
     <button type="submit">Realizar Préstamo</button>
   </form>
-      <div>
-        <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
-    </div>
+  
+  <div>
+    <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
+  </div>
 </body>
 </html>

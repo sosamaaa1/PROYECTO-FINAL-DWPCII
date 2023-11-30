@@ -1,3 +1,4 @@
+<!-- devoluciones.hbs -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,15 +18,16 @@
         <th>Fecha de Devolución</th>
       </tr>
     </thead>
-    <tbody>
-      {{#each devoluciones}}
-        <tr>
-          <td>{{usuario.nombre}}</td>
-          <td>{{libro.titulo}}</td>
-          <td>{{fechaDevolucion}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
+   <tbody>
+  {{#each devoluciones}}
+    <tr>
+      <!-- Accede a las propiedades anidadas -->
+      <td>{{#if usuario}}{{usuario.nombre}}{{else}}Sin usuario{{/if}}</td>
+      <td>{{#if libro}}{{libro.titulo}}{{else}}Sin libro{{/if}}</td>
+      <td>{{fechaDevolucion}}</td>
+    </tr>
+  {{/each}}
+</tbody>
   </table>
 
   <div>

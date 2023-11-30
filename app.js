@@ -5,7 +5,10 @@ const port = 3000;
 const bodyParser = require('body-parser');
 const Libro = require('./models/Libro');
 const Usuario = require('./models/Usuario');
+// Importa el modelo de Prestamo
 const Prestamo = require('./models/Prestamo');
+const Devolucion = require('./models/devolucion');
+const router = express.Router();
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://usuario1:chemita123@cluster0.gaopxrt.mongodb.net/Biblioteca');
@@ -15,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configurar Handlebars como el motor de vistas
 const exphbs = require('express-handlebars');
-
+const handlebarsHelpers = require('handlebars-helpers')();
 
 app.engine('.hbs', exphbs({
   extname: '.hbs',
@@ -25,13 +28,13 @@ app.engine('.hbs', exphbs({
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true,
   },
+  helpers: handlebarsHelpers, // Agrega esta línea para registrar los helpers
 }));
 
 app.set('view engine', '.hbs');
 
 // Servir archivos estáticos desde la carpeta "public"
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // Definir una ruta inicial
 app.get('/', (req, res) => {
@@ -73,6 +76,101 @@ app.post('/registro', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
+// Sección de búsqueda de libros
+app.get('/libros', async (req, res) => {
+  try {
+    // Obtener la consulta de búsqueda desde la URL
+    const busqueda = req.query.busqueda;
+
+    // Realizar la búsqueda en MongoDB
+    const resultadosBusqueda = await Libro.find({
+      $or: [
+        { titulo: { $regex: new RegExp(busqueda, 'i') } },
+        { autor: { $regex: new RegExp(busqueda, 'i') } },
+        { categoria: { $regex: new RegExp(busqueda, 'i') } },
+      ],
+    });
+
+    // Agregar el estado de disponibilidad a los resultados
+    resultadosBusqueda.forEach(libro => {
+      libro.disponible = libro.copiasDisponibles > 0;
+    });
+
+    // Renderizar la página con los resultados de la búsqueda
+    res.render('books/buscarLibros', { resultadosBusqueda });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+// Sección de registro de libros
+app.post('/libros', async (req, res) => {
+  try {
+    // Extraer datos del formulario
+    const { titulo, autor, categoria, ISBN, copiasDisponibles } = req.body;
+
+    // Crear un nuevo libro
+    const nuevoLibro = new Libro({
+      titulo,
+      autor,
+      categoria,
+      ISBN,
+      copiasDisponibles
+    });
+
+    // Guardar el nuevo libro en la base de datos
+    await nuevoLibro.save();
+
+    // Redirecciona a la página principal o muestra un mensaje de éxito
+    res.render('layouts/exito', { mensaje: 'Libro registrado con éxito.' });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+// Sección de edición de libros
+app.get('/libros/:ISBN/editar', async (req, res) => {
+  try {
+    // Obtener el ISBN desde la URL
+    const ISBN = req.params.ISBN;
+
+    // Obtener los datos del libro desde la base de datos
+    const libro = await Libro.findOne({ ISBN });
+
+    // Renderizar la página de edición con los datos del libro
+    res.render('books/editarLibro', libro);
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/registro');
+  }
+});
+
+app.post('/libros/:ISBN/editar', async (req, res) => {
+  try {
+    // Obtener el ISBN desde la URL
+    const ISBN = req.params.ISBN;
+
+    // Actualizar los datos del libro en la base de datos
+    await Libro.updateOne({ ISBN }, { $set: req.body });
+
+    // Redireccionar a la página de búsqueda de libros
+    res.redirect('/libros');
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/libros');
+  }
+});
+//--------------------------------------------------------------------------------------
+
+
+
+
+//--------------------------------------------------------------------------------------
 // Sección de registro usuarios
 // Agregar una ruta GET para "/usuarios"
 app.get('/usuarios', (req, res) => {
@@ -98,64 +196,6 @@ app.post('/usuarios', async (req, res) => {
 
     // Redirecciona a la página principal o muestra un mensaje de éxito
     res.render('layouts/exito', { mensaje: 'Usuario registrado con éxito.' });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
-//--------------------------------------------------------------------------------------
-// Sección de registro de Prestamos y devoluciones
-// Agregar una ruta GET para "/prestamos-devoluciones"
-app.get('/prestamo', async (req, res) => {
-  try {
-    // Obtener la lista de usuarios y libros desde la base de datos
-    const usuarios = await Usuario.find();
-    const libros = await Libro.find();
-
-    // Renderizar la página de préstamos y devoluciones con la lista de usuarios y libros
-    res.render('loans/prestamosDevoluciones', { usuarios, libros });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
-
-// Manejar la solicitud POST del formulario de préstamos
-app.post('/prestamo', async (req, res) => {
-  try {
-    // Extraer datos del formulario de préstamo
-    const { usuario, libro, fechaPrestamo, fechaDevolucionEstimada } = req.body;
-
-
-    // Crear un nuevo prestamo 
-    const nuevoPrestamo = new Prestamo({
-      usuario,
-      libro,
-      fechaPrestamo,
-      fechaDevolucionEstimada
-    });
-
-    // Guardar el nuevo prestamo en la base de datos
-    await nuevoPrestamo.save()
-
-    // Luego, redirige o renderiza una vista de éxito
-    res.render('layouts/exito', { mensaje: 'Préstamo realizado con éxito.' });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
-// Ruta para mostrar la lista de devoluciones
-app.get('/devoluciones', async (req, res) => {
-  try {
-    // Obtener todas las devoluciones desde la base de datos
-    const devoluciones = await Devolucion.find().populate('usuario libro');
-
-    // Renderizar la página de devoluciones con la lista de devoluciones
-    res.render('loans/devoluciones', { devoluciones });
   } catch (error) {
     // Manejo de errores
     console.error(error);
@@ -222,105 +262,23 @@ app.get('/buscar', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
-// Sección de búsqueda de libros
-app.get('/libros', async (req, res) => {
-  try {
-    // Obtener la consulta de búsqueda desde la URL
-    const busqueda = req.query.busqueda;
 
-    // Realizar la búsqueda en MongoDB
-    const resultadosBusqueda = await Libro.find({
-      $or: [
-        { titulo: { $regex: new RegExp(busqueda, 'i') } },
-        { autor: { $regex: new RegExp(busqueda, 'i') } },
-        { categoria: { $regex: new RegExp(busqueda, 'i') } },
-      ],
-    });
 
-    // Renderizar la página con los resultados de la búsqueda
-    res.render('books/buscarLibros', { resultadosBusqueda });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
 
-// Sección de registro de libros
-app.post('/libros', async (req, res) => {
-  try {
-    // Extraer datos del formulario
-    const { titulo, autor, categoria, ISBN, copiasDisponibles } = req.body;
 
-    // Crear un nuevo libro
-    const nuevoLibro = new Libro({
-      titulo,
-      autor,
-      categoria,
-      ISBN,
-      copiasDisponibles
-    });
-
-    // Guardar el nuevo libro en la base de datos
-    await nuevoLibro.save();
-
-    // Redirecciona a la página principal o muestra un mensaje de éxito
-    res.render('layouts/exito', { mensaje: 'Libro registrado con éxito.' });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
-
-// Sección de edición de libros
-app.get('/libros/:ISBN/editar', async (req, res) => {
-  try {
-    // Obtener el ISBN desde la URL
-    const ISBN = req.params.ISBN;
-
-    // Obtener los datos del libro desde la base de datos
-    const libro = await Libro.findOne({ ISBN });
-
-    // Renderizar la página de edición con los datos del libro
-    res.render('books/editarLibro', libro);
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/registro');
-  }
-});
-
-app.post('/libros/:ISBN/editar', async (req, res) => {
-  try {
-    // Obtener el ISBN desde la URL
-    const ISBN = req.params.ISBN;
-
-    // Actualizar los datos del libro en la base de datos
-    await Libro.updateOne({ ISBN }, { $set: req.body });
-
-    // Redireccionar a la página de búsqueda de libros
-    res.redirect('/libros');
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/libros');
-  }
-});
 
 //--------------------------------------------------------------------------------------
-const Devolucion = require('./models/devolucion'); // Asegúrate de tener el modelo Devolucion
-
-// Sección de registro de Préstamos y Devoluciones
-// Agregar una ruta GET para "/prestamos-devoluciones"
+// Ruta existente para "/prestamo"
 app.get('/prestamo', async (req, res) => {
   try {
-    // Obtener la lista de usuarios y libros desde la base de datos
+    // Obtener la lista de usuarios desde la base de datos
     const usuarios = await Usuario.find();
-    const libros = await Libro.find();
 
-    // Renderizar la página de préstamos y devoluciones con la lista de usuarios y libros
-    res.render('loans/prestamosDevoluciones', { usuarios, libros });
+    // Obtener la lista de libros disponibles desde la base de datos
+    const librosDisponibles = await Libro.find({ copiasDisponibles: { $gt: 0 } }).lean();
+
+    // Renderizar la página de registro de préstamos con la información de usuarios y libros disponibles
+    res.render('prestamos/registroPrestamos', { usuarios, libros: librosDisponibles });
   } catch (error) {
     // Manejo de errores
     console.error(error);
@@ -328,37 +286,9 @@ app.get('/prestamo', async (req, res) => {
   }
 });
 
-// Manejar la solicitud POST del formulario de préstamos
-app.post('/prestamo', async (req, res) => {
-  try {
-    // Extraer datos del formulario de préstamo
-    const { usuario, libro, fechaPrestamo, fechaDevolucionEstimada } = req.body;
 
-    // Crear un nuevo préstamo 
-    const nuevoPrestamo = new Prestamo({
-      usuario,
-      libro,
-      fechaPrestamo,
-      fechaDevolucionEstimada
-    });
-
-    // Guardar el nuevo préstamo en la base de datos
-    await nuevoPrestamo.save();
-
-    // Actualizar el estado de disponibilidad del libro (suponiendo que tienes un campo 'disponible' en tu modelo de libro)
-    await Libro.findByIdAndUpdate(libro, { disponible: false });
-
-    // Luego, redirige o renderiza una vista de éxito
-    res.render('layouts/exito', { mensaje: 'Préstamo realizado con éxito.' });
-  } catch (error) {
-    // Manejo de errores
-    console.error(error);
-    res.redirect('/');
-  }
-});
-
-// Sección de búsqueda de préstamos
-app.get('/bPrestamos', async (req, res) => {
+// Agregar una ruta GET para "/buscarPrestamos"
+app.get('/buscarPrestamos', async (req, res) => {
   try {
     // Obtener la consulta de búsqueda desde la URL
     const busqueda = req.query.busqueda;
@@ -372,7 +302,47 @@ app.get('/bPrestamos', async (req, res) => {
     });
 
     // Renderizar la página con los resultados de la búsqueda
-    res.render('loans/buscarPrestamos', { resultadosBusqueda });
+    res.render('prestamos/buscarPrestamos', { resultadosBusqueda });
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.redirect('/');
+  }
+});
+//-------------------------------------------------------------------------------------------
+// Agregar una ruta POST para "/prestamo"
+app.post('/prestamo', async (req, res) => {
+  try {
+    // Lógica para manejar la solicitud POST del formulario de préstamo
+    const { usuario, libro, fechaPrestamo, fechaDevolucionEstimada } = req.body;
+
+    // Verificar si el libro está disponible
+    const libroSeleccionado = await Libro.findById(libro);
+
+    if (!libroSeleccionado || libroSeleccionado.copiasDisponibles <= 0) {
+      // El libro no está disponible
+      return res.render('layouts/error', { mensaje: 'El libro seleccionado no está disponible para préstamo.' });
+    }
+
+    // Crear un nuevo préstamo
+    const nuevoPrestamo = new Prestamo({
+      usuario,
+      libro,
+      fechaPrestamo,
+      fechaDevolucionEstimada,
+    });
+
+    // Guardar el préstamo en la base de datos
+    await nuevoPrestamo.save();
+
+    // Actualizar la disponibilidad del libro
+    libroSeleccionado.copiasDisponibles--;
+
+    // Guardar la actualización del libro en la base de datos
+    await libroSeleccionado.save();
+
+    // Redireccionar o renderizar una página de éxito
+    res.render('layouts/exito', { mensaje: 'Préstamo realizado con éxito.' });
   } catch (error) {
     // Manejo de errores
     console.error(error);
@@ -380,59 +350,62 @@ app.get('/bPrestamos', async (req, res) => {
   }
 });
 
-// Ruta para mostrar el formulario de devolución
-app.get('/devolucion/:id', async (req, res) => {
+//--------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------
+//CODIGO PARA DEVOLUCIONES
+// Agregar una ruta GET para mostrar la lista de devoluciones realizadas
+app.get('/devoluciones', async (req, res) => {
   try {
-    const prestamoId = req.params.id;
+    // Obtener la lista de devoluciones desde la base de datos
+    const devoluciones = await Devolucion.find().populate('usuario libro').lean();
 
-    // Obtener los datos del préstamo desde la base de datos
-    const prestamo = await Prestamo.findById(prestamoId);
-
-    // Renderizar la página de devolución con los datos del préstamo
-    res.render('loans/devolucionPrestamo', { prestamo });
+    // Renderizar la página de devoluciones con la información de las devoluciones
+    res.render('devoluciones/devoluciones', { devoluciones });
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/bPrestamos');
+    res.redirect('/');
   }
 });
 
-// Ruta para procesar la solicitud de devolución
-app.post('/devolucion/:id', async (req, res) => {
+// Agregar una ruta POST para manejar las devoluciones
+app.post('/realizarDevolucion/:idPrestamo', async (req, res) => {
   try {
-    const prestamoId = req.params.id;
+    const idPrestamo = req.params.idPrestamo;
 
-    // Obtener los datos del préstamo desde la base de datos
-    const prestamo = await Prestamo.findById(prestamoId);
+    // Obtener el préstamo correspondiente
+    const prestamo = await Prestamo.findById(idPrestamo);
 
-    // Actualizar el estado de disponibilidad del libro a true
-    await Libro.findByIdAndUpdate(prestamo.libro, { disponible: true });
+    if (!prestamo || prestamo.estado === 'devuelto') {
+      // El préstamo no existe o ya ha sido devuelto
+      return res.render('layouts/error', { mensaje: 'El préstamo no existe o ya ha sido devuelto.' });
+    }
 
-    // Registrar la fecha de devolución en el préstamo
-    prestamo.fechaDevolucion = new Date();
-    await prestamo.save();
-
-    // Almacenar la información de la devolución en la colección de Devolucion
+    // Crear una nueva devolución
     const nuevaDevolucion = new Devolucion({
       usuario: prestamo.usuario,
       libro: prestamo.libro,
-      fechaDevolucion: prestamo.fechaDevolucion,
     });
+
+    // Guardar la devolución en la base de datos
     await nuevaDevolucion.save();
 
-    // Eliminar el registro del préstamo
-    await Prestamo.findByIdAndDelete(prestamoId);
+    // Actualizar el estado del préstamo a 'devuelto'
+    prestamo.estado = 'devuelto';
+    await prestamo.save();
 
-    // Redireccionar a la página de búsqueda de préstamos
-    res.redirect('/bPrestamos');
+    // Redireccionar o renderizar una página de éxito
+    res.render('layouts/exito', { mensaje: 'Devolución realizada con éxito.' });
   } catch (error) {
     // Manejo de errores
     console.error(error);
-    res.redirect('/bPrestamos');
+    res.redirect('/');
   }
 });
+//--------------------------------------------------------------------------------------
 
-//-----------------------------------------------------------
+
 app.listen(port, () => {
-  console.log(`Aplicación en ejecución en http://localhost:${port}`);
+  console.log(`🎉Aplicación en ejecución en http://localhost:${port}`);
 });

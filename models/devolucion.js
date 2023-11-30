@@ -1,3 +1,4 @@
+// devolucion.js
 const mongoose = require('mongoose');
 
 const devolucionSchema = new mongoose.Schema({

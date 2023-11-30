@@ -40,7 +40,15 @@
             <td>{{categoria}}</td>
             <td>{{ISBN}}</td>
             <td>{{copiasDisponibles}}</td>
-            <td>{{#if disponible}}Disponible{{else}}No disponible{{/if}}</td>
+<td>
+  {{#if (compare copiasDisponibles ">" 0)}}
+    Disponible
+  {{else}}
+    No disponible
+  {{/if}}
+</td>
+
+
             <td>
               <form action="/libros/{{ISBN}}/editar" method="GET">
                 <button type="submit">MODIFICAR</button>
