@@ -18,6 +18,11 @@ const prestamoSchema = new mongoose.Schema({
         type: String,
          required: true 
     },
+    estado: {
+        type: String,
+        enum: ['activo', 'devuelto'],
+        default: 'activo'
+    }
 });
 
 

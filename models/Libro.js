@@ -24,7 +24,12 @@ const libroSchema = new mongoose.Schema({
     },
     disponible: {
          type: Boolean,
-          default: true } // Nuevo campo para el estado del libro
+          default: true },
+    reservado: {
+         type: Boolean,
+         default: false
+        }
+    
 });
 
 

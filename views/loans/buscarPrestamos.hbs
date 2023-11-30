@@ -17,18 +17,31 @@
       <button type="submit">Buscar</button>
     </form>
 
-    <!-- Mostrar resultados de la búsqueda -->
-    <table>
-      <thead>
-        <tr>
-          <th>usuario</th>
-          <th>libro</th>
-          <th>fechaPrestamo</th>
-          <th>fechaDevolucionEstimada</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
+   <!-- Modifica la tabla para incluir la opción de reservar -->
+<tbody>
+   <!-- Por cada usuario encontrado, muestra una fila con un botón para reservar -->
+{{#each resultadosBusqueda}}
+  <tr>
+    <td>{{usuario}}</td>
+    <td>{{libro}}</td>
+    <td>{{fechaPrestamo}}</td>
+    <td>{{fechaDevolucionEstimada}}</td>
+    <td>
+      {{#if prestamo.libro.disponible}}
+        <form action="/devolucion/{{_id}}" method="POST">
+          <button type="submit">DEVOLVER</button>
+        </form>
+      {{else}}
+        <form action="/devolucion/{{_id}}" method="POST">
+          <button type="submit">RESERVAR</button>
+        </form>
+      {{/if}}
+    </td>
+  </tr>
+{{/each}}
+
+</tbody>
+
         <!-- Por cada usuario encontrado, muestra una fila con un botón para seleccionar -->
         {{#each resultadosBusqueda}}
           <tr>
