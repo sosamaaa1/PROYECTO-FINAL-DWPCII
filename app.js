@@ -353,6 +353,10 @@ app.post('/prestamo', async (req, res) => {
 
 //--------------------------------------------------------------------------------------
 
+
+
+
+
 //--------------------------------------------------------------------------------------
 //CODIGO PARA DEVOLUCIONES
 // Agregar una ruta GET para mostrar la lista de devoluciones realizadas
@@ -392,9 +396,8 @@ app.post('/realizarDevolucion/:idPrestamo', async (req, res) => {
     // Guardar la devolución en la base de datos
     await nuevaDevolucion.save();
 
-    // Actualizar el estado del préstamo a 'devuelto'
-    prestamo.estado = 'devuelto';
-    await prestamo.save();
+    // Eliminar el préstamo de la base de datos
+    await Prestamo.findByIdAndDelete(idPrestamo);
 
     // Redireccionar o renderizar una página de éxito
     res.render('layouts/exito', { mensaje: 'Devolución realizada con éxito.' });
