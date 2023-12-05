@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5; /* Puedes ajustar el color según tus preferencias */
+    background-color: #f5f5f5; 
 }
 
 form {
@@ -23,7 +23,7 @@ input {
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #2629ac;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -32,7 +32,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #3038ad;
 }
 
 table {
@@ -48,7 +48,7 @@ th, td {
 }
 
 th {
-    background-color: #4caf50;
+    background-color: #4c66af;
     color: white;
 }
 
@@ -57,17 +57,15 @@ tr:hover {
 }
 
 
-/* Agrega estilos adicionales según tus necesidades */
-
 header {
-    background-color: #18581a;
+    background-color: #181958;
     color: #fff;
     text-align: center;
     padding: 1em;
 }
 
 nav {
-    background-color: #4caf50;
+    background-color: #4c56af;
     overflow: hidden;
 }
 
@@ -86,7 +84,7 @@ nav a:hover {
 }
 
 .dropdown {
-    float: right;
+    float: left;
     overflow: hidden;
 }
 
@@ -102,7 +100,7 @@ nav a:hover {
 }
 
 nav a, .dropdown:hover .dropbtn {
-    background-color: #4caf50;
+    background-color: #4c4eaf;
 }
 
 .dropdown-content {

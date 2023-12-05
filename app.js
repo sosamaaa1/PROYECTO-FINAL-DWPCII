@@ -8,7 +8,8 @@ const Usuario = require('./models/Usuario');
 const Prestamo = require('./models/Prestamo');
 const Devolucion = require('./models/devolucion');
 const Reservacion = require('./models/Reservacion'); 
-
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 const router = express.Router();
 
 const mongoose = require('mongoose');
@@ -483,7 +484,57 @@ app.get('/buscarReservaciones', async (req, res) => {
 });
 
 //--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+
+app.get('/reporte/prestamos', async (req, res) => {
+  try {
+    const doc = new PDFDocument();
+    const filePath = path.join(__dirname, 'ruta', 'del', 'archivo.pdf');
+    doc.pipe(fs.createWriteStream(filePath));
+
+    // Lógica para agregar contenido al reporte 
+    doc.fontSize(16).text('Reporte de Préstamos', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(12).text('Fecha: ' + new Date().toLocaleDateString());
+    doc.moveDown();
+
+
+    doc.end();
+
+    // Envía el archivo generado al navegador
+    res.sendFile(filePath);
+  } catch (error) {
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+// Ruta para generar el reporte de préstamos
+app.get('/reporte/prestamos2', async (req, res) => {
+  try {
+    // Lógica para generar el reporte de préstamos
+    const doc = new PDFDocument();
+    const filePath = path.join(__dirname, 'ruta', 'del', 'archivo2.pdf'); 
+    doc.pipe(fs.createWriteStream(filePath));
+
+    // Agrega contenido al segundo reporte 
+    doc.fontSize(16).text('Otro Reporte de Préstamos', { align: 'center' });
+    doc.moveDown();
+    doc.fontSize(12).text('Fecha: ' + new Date().toLocaleDateString());
+    doc.moveDown();
+
+    doc.end();
+
+    // Envía el archivo generado al navegador
+    res.sendFile(filePath);
+  } catch (error) {
+    console.error(error);
+    res.redirect('/');
+  }
+});
+
+//--------------------------------------------------------------------------------------
 
 app.listen(port, () => {
-  console.log(`🎉Aplicación en ejecución en http://localhost:${port}`);
+  console.log(`🎉🎉 Aplicación en ejecución en http://localhost:${port} 🎉🎉`);
 });

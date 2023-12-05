@@ -1,54 +1,59 @@
-<!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="../styles/styles.css">
-  
-    <title>BIBLIOTECA ITGAM</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../styles/styles.css" />
 
-<body>
+    <title>BIBLIOTECA ITGAM</title>
+  </head>
+
+  <body>
     <nav>
         <div class="dropdown">
-        <a href="http://127.0.0.1:3000/devoluciones">Devoluciones</a>
+        <a href="http://127.0.0.1:3000/">
+          <i class="fas fa-home"></i>
+          Inicio
+        </a>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">
+          <i class="fas fa-book"></i>Libros
+        </button>
+        <div class="dropdown-content">
+          <a href="http://127.0.0.1:3000/registro">Registrar Libro</a>
+          <a href="http://127.0.0.1:3000/libros">Visualizar Libros</a>
         </div>
-         <div class="dropdown">
-            <button class="dropbtn">Reservaciones</button>
-            <div class="dropdown-content">
-                <a href="http://127.0.0.1:3000/reservacion">Registrar Reservacion</a>
-                <a href="http://127.0.0.1:3000/buscarReservaciones">Visualizar Reservaciones</a>
-            </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">
+          <i class="fas fa-user"></i>Usuarios
+        </button>
+        <div class="dropdown-content">
+          <a href="http://127.0.0.1:3000/usuarios">Registrar Usuario</a>
+          <a href="http://127.0.0.1:3000/buscar">Visualizar Usuarios</a>
         </div>
-                <div class="dropdown">
-            <button class="dropbtn">Préstamos</button>
-            <div class="dropdown-content">
-                <a href="http://127.0.0.1:3000/prestamo">Registrar Préstamo</a>
-                <a href="http://127.0.0.1:3000/buscarPrestamos">Visualizar Préstamos</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">Libros</button>
-            <div class="dropdown-content">
-                <a href="http://127.0.0.1:3000/registro">Registrar Libro</a>
-                <a href="http://127.0.0.1:3000/libros">Visualizar Libros</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">Usuarios</button>
-            <div class="dropdown-content">
-                <a href="http://127.0.0.1:3000/usuarios">Registrar Usuario</a>
-                <a href="http://127.0.0.1:3000/buscar">Visualizar Usuarios</a>
-            </div>
-        </div>
+      </div>
+      <div class="dropdown">
 
-        <div class="dropdown">
-        <a href="http://127.0.0.1:3000/">Inicio</a>
+        <button class="dropbtn">
+          <i class="fas fa-bars"></i> Acciones
+          </button>
+        <div class="dropdown-content">
+          <a href="http://127.0.0.1:3000/prestamo">Registrar Préstamo</a>
+          <a href="http://127.0.0.1:3000/buscarPrestamos">Visualizar Préstamos</a>
+          <a href="http://127.0.0.1:3000/reservacion">Registrar Reservacion</a>
+          <a href="http://127.0.0.1:3000/buscarReservaciones">Visualizar Reservaciones</a>
+          <a href="http://127.0.0.1:3000/devoluciones">Devoluciones</a>
         </div>
+      </div>
+      <a href="/reporte/prestamos" target="_blank">Generar Reporte de Préstamos</a>
+<!-- Agrega enlaces similares para otros tipos de reportes -->
+
     </nav>
-</body>
+  </body>
+
 
 </html>
