@@ -1,0 +1,17 @@
+<!-- Vista para mostrar las multas de un usuario -->
+<h1>Multas del Usuario</h1>
+
+<ul>
+  {{#each multasUsuario}}
+    <li>
+      <strong>Libro:</strong> {{libro}} |
+      <strong>Fecha de Préstamo:</strong> {{fechaPrestamo}} |
+      <strong>Fecha de Devolución Estimada:</strong> {{fechaDevolucionEstimada}} |
+      <strong>Multa:</strong> {{multa}}
+    </li>
+  {{/each}}
+</ul>
+
+<div>
+  <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
+</div>

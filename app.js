@@ -420,6 +420,20 @@ app.post("/realizarDevolucion/:idPrestamo", async (req, res) => {
       });
     }
 
+    // Calcular la multa si la devolución es tardía
+    const fechaDevolucionReal = new Date();
+    const diasDeRetraso = Math.floor((fechaDevolucionReal - new Date(prestamo.fechaDevolucionEstimada)) / (1000 * 60 * 60 * 24));
+
+    // Ajusta la tarifa según tus requisitos
+    const tarifaMultaDiaria = 1;
+    
+    // Asignar la multa y la fecha de devolución real al préstamo
+    prestamo.multa = diasDeRetraso > 0; // true si hay multa, false si no hay multa
+    prestamo.fechaDevolucionReal = fechaDevolucionReal;
+
+    // Guardar la actualización del préstamo en la base de datos
+    await prestamo.save();
+
     // Crear una nueva devolución
     const nuevaDevolucion = new Devolucion({
       usuario: prestamo.usuario,
@@ -440,6 +454,7 @@ app.post("/realizarDevolucion/:idPrestamo", async (req, res) => {
     res.redirect("/");
   }
 });
+
 //--------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------
@@ -589,6 +604,45 @@ app.get("/reporte/prestamo2", async (req, res) => {
     res.redirect("/");
   }
 });
+
+//--------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------
+// Ruta GET para mostrar las multas de un usuario
+app.get("/multas/:usuarioId", async (req, res) => {
+  console.log(`Buscando multas para el usuario: ${usuarioId}`);
+
+  try {
+    const usuarioId = req.params.usuarioId;
+
+    // Obtener los préstamos activos del usuario con multa
+    const multasUsuario = await Prestamo.aggregate([
+      {
+        $match: {
+          usuario: usuarioId,
+          estado: 'activo',
+          multa: true, // Cambiado a true para representar que hay multa
+        },
+      },
+      {
+        $project: {
+          libro: 1,
+          fechaPrestamo: 1,
+          fechaDevolucionEstimada: 1,
+          multa: 1,
+        },
+      },
+    ]);
+
+    // Renderizar la página con las multas del usuario
+    res.render("multas/multasUsuario", { multasUsuario });
+  } catch (error) {
+    // Manejo de errores: Imprimir el error en la consola y redirigir a la página principal
+    console.error(error);
+    res.redirect("/");
+  }
+});
+
 
 //--------------------------------------------------------------------------------------
 

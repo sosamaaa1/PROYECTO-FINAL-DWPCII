@@ -25,21 +25,30 @@
         <th>Fecha de Préstamo</th>
         <th>Fecha de Devolución Estimada</th>
         <th>Acción</th>
+        <th>Estado</th>
+        <th>Multas</th>
       </tr>
     </thead>
     <tbody>
       {{#each resultadosBusqueda}}
-        <tr>
-          <td>{{usuario}}</td>
-          <td>{{libro}}</td>
-          <td>{{fechaPrestamo}}</td>
-          <td>{{fechaDevolucionEstimada}}</td>
-          <td>
-<form action="/realizarDevolucion/{{_id}}" method="POST">
-  <button type="submit">DEVOLVER</button>
-</form>
-          </td>
-        </tr>
+      <tr>
+  <td>{{usuario}}</td>
+  <td>{{libro}}</td>
+  <td>{{fechaPrestamo}}</td>
+  <td>{{fechaDevolucionEstimada}}</td>
+  <td>
+    <form action="/realizarDevolucion/{{_id}}" method="POST">
+      <button type="submit">DEVOLVER</button>
+    </form>
+  </td>
+  <td>{{#if fechaDevolucionReal}}{{fechaDevolucionReal}}{{else}}Pendiente{{/if}}</td>
+  <td>{{#if multa}}{{multa}}{{else}}Sin Multa{{/if}}</td>
+  <td>
+    {{#if multa}}
+      <a href="/multas/{{usuario}}">Ver Multas</a>
+    {{/if}}
+  </td>
+</tr>
       {{/each}}
     </tbody>
   </table>

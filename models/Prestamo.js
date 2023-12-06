@@ -1,6 +1,4 @@
-// models/Prestamo.js
 const mongoose = require('mongoose');
-
 const prestamoSchema = new mongoose.Schema({
     usuario: {
         type: String,
@@ -11,20 +9,26 @@ const prestamoSchema = new mongoose.Schema({
         required: true
     },
     fechaPrestamo: {
-        type: String,
+        type: Date,  
         required: true
     },
     fechaDevolucionEstimada: {
-        type: String,
-         required: true 
+        type: Date,  
+        required: true 
     },
     estado: {
         type: String,
         enum: ['activo', 'devuelto'],
         default: 'activo'
-    }
+    },
+    fechaDevolucionReal: {
+        type: Date,  
+    },
+    multa: {
+        type: Boolean,
+        default: false, 
+    },
 });
-
 
 const Prestamo = mongoose.model('Prestamo', prestamoSchema);
 
