@@ -1,35 +1,55 @@
-<!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Usuario</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-</head>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
 
-<body>
+  <body>
     <h1>Editar Usuario</h1>
 
     <form action="/usuarios/{{codigoEstudiante}}/editar" method="POST">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="{{nombre}}" required>
+      <label for="nombre">Nombre:</label>
+      <input
+        type="text"
+        id="nombre"
+        name="nombre"
+        value="{{nombre}}"
+        required
+      />
 
-        <label for="codigoEstudiante">Código de Estudiante:</label>
-        <input type="text" id="codigoEstudiante" name="codigoEstudiante" value="{{codigoEstudiante}}" required readonly>
+      <label for="codigoEstudiante">Código de Estudiante:</label>
+      <input
+        type="text"
+        id="codigoEstudiante"
+        name="codigoEstudiante"
+        value="{{codigoEstudiante}}"
+        required
+        readonly
+      />
 
-        <label for="grado">Grado:</label>
-        <input type="text" id="grado" name="grado" value="{{grado}}" required>
+      <label for="grado">Grado:</label>
+      <input type="text" id="grado" name="grado" value="{{grado}}" required />
 
-        <label for="seccion">Sección:</label>
-        <input type="text" id="seccion" name="seccion" value="{{seccion}}" required>
+      <label for="seccion">Sección:</label>
+      <input
+        type="text"
+        id="seccion"
+        name="seccion"
+        value="{{seccion}}"
+        required
+      />
 
-        <button type="submit">Guardar Cambios</button>
+      <button type="submit">Guardar Cambios</button>
     </form>
-    
+
     <div>
-        <button onclick="window.location.href='http://127.0.0.1:3000/usuarios'">Cancelar</button>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/usuarios'"
+      >Cancelar</button>
     </div>
-</body>
+  </body>
 
 </html>

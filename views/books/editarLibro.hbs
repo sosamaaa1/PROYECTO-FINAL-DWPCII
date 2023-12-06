@@ -1,38 +1,64 @@
-<!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Libro</title>
-    <link rel="stylesheet" href="../styles/styles.css">
-</head>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
 
-<body>
+  <body>
     <h1>Editar Libro</h1>
 
     <form action="/libros/{{ISBN}}/editar" method="POST">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo" value="{{titulo}}" required>
+      <label for="titulo">Título:</label>
+      <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        value="{{titulo}}"
+        required
+      />
 
-        <label for="autor">Autor:</label>
-        <input type="text" id="autor" name="autor" value="{{autor}}" required>
+      <label for="autor">Autor:</label>
+      <input type="text" id="autor" name="autor" value="{{autor}}" required />
 
-        <label for="categoria">Categoría:</label>
-        <input type="text" id="categoria" name="categoria" value="{{categoria}}" required>
+      <label for="categoria">Categoría:</label>
+      <input
+        type="text"
+        id="categoria"
+        name="categoria"
+        value="{{categoria}}"
+        required
+      />
 
-        <label for="isbn">ISBN:</label>
-        <input type="text" id="isbn" name="ISBN" value="{{ISBN}}" required readonly>
+      <label for="isbn">ISBN:</label>
+      <input
+        type="text"
+        id="isbn"
+        name="ISBN"
+        value="{{ISBN}}"
+        required
+        readonly
+      />
 
-        <label for="copias">Copias Disponibles:</label>
-        <input type="text" id="copias" name="copiasDisponibles" value="{{copiasDisponibles}}" required>
+      <label for="copias">Copias Disponibles:</label>
+      <input
+        type="text"
+        id="copias"
+        name="copiasDisponibles"
+        value="{{copiasDisponibles}}"
+        required
+      />
 
-        <button type="submit">Guardar Cambios</button>
+      <button type="submit">Guardar Cambios</button>
     </form>
 
     <div>
-        <button onclick="window.location.href='http://127.0.0.1:3000/libros'">Cancelar</button>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/libros'"
+      >Cancelar</button>
     </div>
-</body>
+  </body>
 
 </html>

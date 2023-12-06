@@ -1,3 +1,4 @@
+<!-- index.hbs -->
 <html lang="en">
 
   <head>
@@ -11,8 +12,9 @@
   </head>
 
   <body>
+
     <nav>
-        <div class="dropdown">
+      <div class="dropdown">
         <a href="http://127.0.0.1:3000/">
           <i class="fas fa-home"></i>
           Inicio
@@ -39,21 +41,32 @@
       <div class="dropdown">
 
         <button class="dropbtn">
-          <i class="fas fa-bars"></i> Acciones
-          </button>
+          <i class="fas fa-bars"></i>
+          Acciones
+        </button>
         <div class="dropdown-content">
           <a href="http://127.0.0.1:3000/prestamo">Registrar Préstamo</a>
           <a href="http://127.0.0.1:3000/buscarPrestamos">Visualizar Préstamos</a>
           <a href="http://127.0.0.1:3000/reservacion">Registrar Reservacion</a>
-          <a href="http://127.0.0.1:3000/buscarReservaciones">Visualizar Reservaciones</a>
-          <a href="http://127.0.0.1:3000/devoluciones">Devoluciones</a>
+          <a href="http://127.0.0.1:3000/buscarReservaciones">Visualizar
+            Reservaciones</a>
+          <a href="http://127.0.0.1:3000/devoluciones">Visualizar Devoluciones</a>
         </div>
       </div>
       <a href="/reporte/prestamos" target="_blank">Generar Reporte de Préstamos</a>
-<!-- Agrega enlaces similares para otros tipos de reportes -->
 
     </nav>
-  </body>
 
+    <div class="search-container">
+      <img src="../images/libros.png" alt="Imagen de búsqueda" />
+      <h2>Buscar Libros</h2>
+      <form action="/libros" method="GET">
+        <label for="busqueda">Buscar por título, autor o categoría:</label>
+        <input type="text" id="busqueda" name="busqueda" required />
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+
+  </body>
 
 </html>

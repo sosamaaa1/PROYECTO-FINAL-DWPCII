@@ -1,43 +1,44 @@
 <!-- registroReservaciones.hbs -->
-<!DOCTYPE html>
+
 <html lang="es">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registro de Reservaciones</title>
-  <link rel="stylesheet" href="../styles/styles.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Reservaciones</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
 
-<body>
-  <h1>Registro de Reservaciones</h1>
+  <body>
+    <h1>Registro de Reservaciones</h1>
 
-  <form action="/reservacion" method="POST">
-    <label for="usuario">Usuario:</label>
-    <select id="usuario" name="usuario" required>
-      {{#each usuarios}}
-        <option value="{{_id}}">{{nombre}}</option>
-      {{/each}}
-    </select>
+    <form action="/reservacion" method="POST">
+      <label for="usuario">Usuario:</label>
+      <select id="usuario" name="usuario" required>
+        {{#each usuarios}}
+          <option value="{{_id}}">{{nombre}}</option>
+        {{/each}}
+      </select>
 
-    <label for="libro">Libro:</label>
-    <select id="libro" name="libro" required>
-      {{#each libros}}
-        <option value="{{_id}}">{{titulo}}</option>
-      {{/each}}
-    </select>
+      <label for="libro">Libro:</label>
+      <select id="libro" name="libro" required>
+        {{#each libros}}
+          <option value="{{_id}}">{{titulo}}</option>
+        {{/each}}
+      </select>
 
-    <!-- Agregar campo para la fecha de préstamo -->
-    <label for="fechaPrestamo">Fecha de Préstamo:</label>
-    <input type="date" id="fechaPrestamo" name="fechaPrestamo" required>
+      <label for="fechaPrestamo">Fecha de Préstamo:</label>
+      <input type="date" id="fechaPrestamo" name="fechaPrestamo" required />
 
-    <button type="submit">Realizar Reservación</button>
-  </form>
+      <button type="submit">Realizar Reservación</button>
+    </form>
 
-  <div>
-    <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
-  </div>
-</body>
+    <div>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/'"
+      >REGRESAR</button>
+    </div>
+  </body>
 
 </html>

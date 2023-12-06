@@ -1,37 +1,38 @@
 <!-- devoluciones.hbs -->
-<!DOCTYPE html>
+
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Devoluciones Realizadas</title>
-  <link rel="stylesheet" href="../styles/styles.css">
-</head>
-<body>
-  <h1>Devoluciones Realizadas</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devoluciones Realizadas</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+  </head>
+  <body>
+    <h1>Devoluciones Realizadas</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Libro</th>
-        <th>Fecha de Devolución</th>
-      </tr>
-    </thead>
-   <tbody>
-  {{#each devoluciones}}
-    <tr>
-      <!-- Accede a las propiedades anidadas -->
-      <td>{{#if usuario}}{{usuario.nombre}}{{else}}Sin usuario{{/if}}</td>
-      <td>{{#if libro}}{{libro.titulo}}{{else}}Sin libro{{/if}}</td>
-      <td>{{fechaDevolucion}}</td>
-    </tr>
-  {{/each}}
-</tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Libro</th>
+          <th>Fecha de Devolución</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each devoluciones}}
+          <tr>
+            <td>{{#if usuario}}{{usuario.nombre}}{{else}}Sin usuario{{/if}}</td>
+            <td>{{#if libro}}{{libro.titulo}}{{else}}Sin libro{{/if}}</td>
+            <td>{{fechaDevolucion}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-  <div>
-    <button onclick="window.location.href='http://127.0.0.1:3000/'">REGRESAR</button>
-  </div>
-</body>
+    <div>
+      <button
+        onclick="window.location.href='http://127.0.0.1:3000/'"
+      >REGRESAR</button>
+    </div>
+  </body>
 </html>
